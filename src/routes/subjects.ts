@@ -11,8 +11,11 @@ router.get("/", async (req ,res) => {
 
         const { search,department ,page=1,limit=10} = req.query;
 
-        const currentPage = Math.max(1,+page);
-        const limitPerPage = Math.max(1,+limit);
+        const parsedPage = parseInt(String(page), 10);
+        const parsedLimit = parseInt(String(limit), 10);
+        const currentPage = Math.max(1, Number.isNaN(parsedPage) ? 1 : parsedPage);
+        const limitPerPage = Math.max(1, Math.min(100, Number.isNaN(parsedLimit) ? 10 : parsedLimit));
+
         const offset = (currentPage - 1) * limitPerPage;
 
         const filterConditions = [];
