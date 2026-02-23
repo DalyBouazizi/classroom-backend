@@ -52,7 +52,7 @@ const securityMiddleware = async( req: express.Request, res: express.Response, n
                 return res.status(403).json({ error: 'Forbidden' , message: 'Request blocked by security policy'});
             }
             if(decision.isDenied() && decision.reason.isRateLimit()){
-                return res.status(403).json({ error: 'Forbidden' , message});
+                return res.status(429).json({ error: 'Forbidden' , message});
             }
             next();
 

@@ -1,6 +1,6 @@
 import express from "express";
 import {and, desc, eq, getTableColumns, ilike, or, sql} from "drizzle-orm";
-import {departements, subjects} from "../schema";
+import {departments, subjects} from "../schema";
 import {db} from "../db";
 
 
@@ -32,7 +32,7 @@ router.get("/", async (req ,res) => {
         }
         if(department){
             filterConditions.push(
-                ilike(departements.name,`%${department}%`),
+                ilike(departments.name,`%${department}%`),
             )
         }
 
@@ -41,14 +41,14 @@ router.get("/", async (req ,res) => {
         const countResult = await db
             .select({count : sql<number>`count(*)`})
             .from(subjects)
-            .leftJoin(departements,eq(subjects.departementId,departements.id))
+            .leftJoin(departments,eq(subjects.departmentId,departments.id))
             .where(whereClause)
 
         const totalCount = countResult[0]?.count ?? 0 ;
 
         const subjectList = await db.select({...getTableColumns(subjects),
-        departement : {...getTableColumns(departements)}
-        }).from(subjects).leftJoin(departements,eq(subjects.departementId,departements.id))
+        departement : {...getTableColumns(departments)}
+        }).from(subjects).leftJoin(departments,eq(subjects.departmentId,departments.id))
             .where(whereClause)
             .orderBy(desc(subjects.createdAt))
             .limit(limitPerPage)
@@ -67,7 +67,7 @@ router.get("/", async (req ,res) => {
         })
 
 
-    }catch(err){
+    }catch(err:any){
         console.error( `Get /subjects error ${err.message}` );
         res.status(500).json({error: 'failed to get subjects'});
     }
