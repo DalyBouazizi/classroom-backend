@@ -1,10 +1,15 @@
+import "dotenv/config";
 import express from "express";
 import type { AddressInfo } from "node:net";
 import subjectRouter from "./routes/subjects";
 import cors from "cors";
 
+
 const app = express();
 const PORT = 8000;
+
+
+// console.log("FRONTEND_URL =", process.env.FRONTEND_URL);
 
 if(!process.env.FRONTEND_URL){
   throw new Error("Missing FRONTEND_URL");
